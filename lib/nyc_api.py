@@ -1,14 +1,22 @@
-
 import requests
 import json
 
 class GetPrograms:
+    def get_programs(self):
+        URL = "http://data.cityofnewyork.us/resource/uvks-tn5n.json"
+        response = requests.get(URL)
+        return response.content
 
-  def get_programs(self):
-    URL = "http://data.cityofnewyork.us/resource/uvks-tn5n.json"
+    def program_agencies(self):
+        programs_list = []
+        programs = json.loads(self.get_programs().decode('utf-8'))
+        for program in programs:
+            programs_list.append(program["agency"])
+        return programs_list
 
-    response = requests.get(URL)
-    return response.content
+if __name__ == "__main__":
+    programs = GetPrograms()
+    agencies = programs.program_agencies()
 
-programs = GetPrograms().get_programs()
-print(programs)
+    for agency in set(agencies):
+        print(agency)
